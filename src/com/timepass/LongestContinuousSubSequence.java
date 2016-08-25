@@ -1,26 +1,43 @@
-package template;
+package com.timepass;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by deepanshu on 30/12/15.
+ * Created by deepanshu on 03/01/16, 3:40 PM.
  */
-class HackerEarthTemplate {
+class LongestContinuousSubSequence {
     private static final String SPLIT_CHAR = " ";
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = rsi(br);
         while (T > 0) {
-            System.out.println(getResult());
+            int[] vals = rmi(br);
+            System.out.println(getResult(vals));
             T--;
         }
     }
 
-    private static String getResult() {
-        return "";
+    private static int getResult(int[] vals) {
+        int prevSum = vals[0];
+        int len = 1;
+        int zeroLen = prevSum == 0 ? 1 : 0;
+        for (int i = 1; i < vals.length; i++) {
+            int tmp = prevSum + vals[i];
+            if (tmp >= prevSum) {
+                len++;
+                if (tmp == 0 && zeroLen < len) {
+                    zeroLen = len;
+                }
+            } else {
+                prevSum = vals[i];
+                len = 0;
+            }
+        }
+
+        return zeroLen;
     }
 
     //Read multiple integer values
