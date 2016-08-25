@@ -1,5 +1,7 @@
 package com.ProjectEuler.Utils;
 
+import java.io.PrintWriter;
+
 /**
  * Created by deepanshu on 22/05/16, 1:04 PM.
  */
@@ -10,6 +12,7 @@ public class TimeLogger {
     private static final double MICRO_FAC = 1000;
     private static final double MILLI_FAC = 1000000;
     private static final double SEC_FAC = 1000000000;
+    private final PrintWriter out;
     private long nanons = 0;
     private long elapsedSoFar = 0;
     private long elapsedCurrentSprint = 0;
@@ -20,10 +23,17 @@ public class TimeLogger {
     public TimeLogger() {
         title = "Time to execute testcase: ";
         unit = TimeUnit.SECONDS;
+        out = null;
     }
 
     public TimeLogger(String title, TimeUnit unit) {
         setTitleUnit(title, unit);
+        out = null;
+    }
+
+    public TimeLogger(String title, TimeUnit unit, PrintWriter out) {
+        setTitleUnit(title, unit);
+        this.out = out;
     }
 
     public void setUnit(TimeUnit tu) {
@@ -90,7 +100,15 @@ public class TimeLogger {
 
         val /= fac;
 
-        System.out.println(String.format(MESSAGE, title, val, units[unit.ordinal()]));
+        log(String.format(MESSAGE, title, val, units[unit.ordinal()]));
+    }
+
+    private void log(String logString) {
+        if (out == null) {
+            System.out.println(logString);
+        } else {
+            out.println(logString);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-package com.hackerearth.math;
+package com.hackerearth.math.ModulerArithmatic;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,26 +8,52 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 24/08/16, 10:05 PM.
+ * Created by deepanshu on 25/08/16, 12:59 AM.
  */
-class ModuloArithmatic {
+class BigValues {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
+    private static final int FACT_6 = 720;
+    private static final int FACT_N = 6;
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        while (T > 0) {
-            //int in = rsi(br);
-            String res = getResult();
-            out.println(res);
-            T--;
-        }
+        out.println(getResult(sc.nextInt()));
+        out.close();
     }
 
-    private static String getResult() {
-        return "";
+    private static String getResult(int n) {
+        long num = factorial(n);
+        long den = (FACT_6 * factorial(n - FACT_N)) % MOD;
+
+        return (num * findModuloInverse(den, MOD)) % MOD + "";
+    }
+
+    private static long factorial(int num) {
+        long res = 1;
+
+        for (int i = 2; i <= num; i++) {
+            res = (res * i) % MOD;
+        }
+
+        return res;
+    }
+
+    private static long findModuloInverse(long n, long m) {
+        return fast_pow(n, m - 2, m);
+    }
+
+    private static long fast_pow(long base, long n, long M) {
+        if (n == 0)
+            return 1;
+        if (n == 1)
+            return base;
+        long halfn = fast_pow(base, n / 2, M);
+        if (n % 2 == 0)
+            return (halfn * halfn) % M;
+        else
+            return (((halfn * halfn) % M) * base) % M;
     }
 
     //Assumes str arr contains numbers
@@ -114,7 +140,7 @@ class ModuloArithmatic {
         }
 
         public String next() throws Exception {
-            return nextToken().toString();
+            return nextToken();
         }
 
         public int nextInt() throws Exception {

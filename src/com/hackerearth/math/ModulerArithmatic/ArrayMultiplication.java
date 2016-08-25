@@ -1,4 +1,4 @@
-package com.hackerearth.math;
+package com.hackerearth.math.ModulerArithmatic;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,26 +8,30 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 24/08/16, 10:27 PM.
+ * Created by deepanshu on 25/08/16, 12:44 AM.
  */
-class Modulo1 {
+class ArrayMultiplication {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        while (T > 0) {
-            //int in = rsi(br);
-            String res = getResult();
-            out.println(res);
-            T--;
-        }
+        int N = sc.nextInt();
+        int in[] = sc.nextInt(N);
+        String res = getResult(in);
+        out.println(res);
+        out.close();
     }
 
-    private static String getResult() {
-        return "";
+    private static String getResult(int[] in) {
+        long res = 1;
+
+        for (int i = 0; i < in.length; i++) {
+            res = (res * (in[i] % MOD)) % MOD;
+        }
+
+        return res + "";
     }
 
     //Assumes str arr contains numbers
@@ -114,7 +118,7 @@ class Modulo1 {
         }
 
         public String next() throws Exception {
-            return nextToken().toString();
+            return nextToken();
         }
 
         public int nextInt() throws Exception {
