@@ -1,4 +1,4 @@
-package com.ProjectEuler;
+package com.ProjectEuler.Level_3;
 
 import com.ProjectEuler.ProblemHelpers.FigurateNumberUtil;
 import com.ProjectEuler.Utils.Log;

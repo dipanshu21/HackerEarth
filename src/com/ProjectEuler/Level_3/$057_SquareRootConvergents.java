@@ -1,28 +1,26 @@
-package com.ProjectEuler;
+package com.ProjectEuler.Level_3;
 
 import com.ProjectEuler.Utils.Log;
 import com.ProjectEuler.Utils.TimeLogger;
 import com.ProjectEuler.Utils.TimeUnit;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by deepanshu on 22/05/16, 5:53 PM.
+ * Created by deepanshu on 22/05/16, 8:29 PM.
  */
-class $056_PowerfulDigitSum {
+class $057_SquareRootConvergents {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final String FILE_NAME = ".txt";
     private static final String TESTCASE_TIME_LOG_MESSAGE = "Time to execute testcase: ";
     private static final String INPUT_TIME_LOG_MESSAGE = "Time to take input: ";
-    private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.SECONDS);
+    private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.MICRO_SECONDS);
 
     public static void main(String[] args) throws IOException {
         Log.enableLogging();
-        tl.setTitleUnit("Testcase", TimeUnit.MILLI_SECONDS);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = rsi(br);
         while (T > 0) {
@@ -37,38 +35,8 @@ class $056_PowerfulDigitSum {
     }
 
     private static String getResult() {
-        int maxSum = 0;
 
-        for (int i = 1; i < 100; i++) {
-            for (int j = 1; j < 100; j++) {
-                int digSum = sumOfDig(getPower(i, j));
-                maxSum = Math.max(maxSum, digSum);
-            }
-        }
-
-        return maxSum + "";
-    }
-
-    public static int sumOfDig(BigInteger bi) {
-        int sum = 0;
-        for (char c : bi.toString().toCharArray()) {
-            sum += c - '0';
-        }
-
-        return sum;
-    }
-
-    public static BigInteger getPower(int a, int p) {
-        if (p == 1) return new BigInteger(a + "");
-
-        BigInteger half = getPower(a, p / 2);
-        BigInteger ans = half.multiply(half);
-
-        if (p % 2 != 0) {
-            ans = ans.multiply(new BigInteger(a + ""));
-        }
-
-        return ans;
+        return 2 * ((1000 - 1) / 13.0) + "";
     }
 
     //read multiple strings from a file

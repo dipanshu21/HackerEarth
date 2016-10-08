@@ -1,15 +1,14 @@
-package com.ProjectEuler;
+package com.ProjectEuler.Level_3;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 /**
- * Created by deepanshu on 21/05/16, 1:58 PM.
+ * Created by deepanshu on 19/05/16, 7:16 AM.
  */
-class $053_CombinatoricSelections {
+class $052_PermutedMultiples {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
 
@@ -28,23 +27,44 @@ class $053_CombinatoricSelections {
     }
 
     private static String getResult() {
-        BigInteger[] factorials = new BigInteger[101];
-        factorials[0] = new BigInteger("1");
+        int s = 100000;
+        int e = 1000000;
+        int x = 6;
 
-        for (int i = 1; i < factorials.length; i++) {
-            factorials[i] = factorials[i - 1].multiply(new BigInteger(i + ""));
-        }
-
-        int count = 0;
-        for (int i = 1; i < 101; i++) {
-            for (int j = 1; j < i; j++) {
-                if (factorials[i].divide(factorials[j].multiply(factorials[i - j])).toString().length() > 6) {
-                    count++;
+        e = e / x;
+        for (int i = s; i <= e; i++) {
+            if (areSame(i, x)) {
+                for (int k = 1; k <= x; k++) {
+                    System.out.println(i * k);
                 }
+                break;
             }
         }
 
-        return count + "";
+        return "";
+    }
+
+    private static boolean areSame(int n, int x) {
+        int[] t = new int[10];
+        int c = n;
+
+        while (n != 0) {
+            t[n % 10] += (x - 1);
+            n /= 10;
+        }
+
+        for (int i = 2; i <= x; i++) {
+            n = c;
+            n *= i;
+            while (n != 0) {
+                int d = n % 10;
+                t[d] -= 1;
+                if (t[d] < 0) return false;
+                n /= 10;
+            }
+        }
+
+        return true;
     }
 
     //Read multiple integer values

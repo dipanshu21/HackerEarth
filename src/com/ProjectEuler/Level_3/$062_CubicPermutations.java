@@ -1,32 +1,31 @@
-package com.ProjectEuler;
+package com.ProjectEuler.Level_3;
 
 import com.ProjectEuler.Utils.Log;
 import com.ProjectEuler.Utils.TimeLogger;
 import com.ProjectEuler.Utils.TimeUnit;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by deepanshu on 23/05/16, 8:38 AM.
+ * Created by deepanshu on 12/06/16, 1:12 PM.
  */
-class $059_XORDecryption {
+class $062_CubicPermutations {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
-    private static final String FILE_NAME = "p059_cipher.txt";
+    private static final String FILE_NAME = ".txt";
     private static final String TESTCASE_TIME_LOG_MESSAGE = "Time to execute testcase: ";
     private static final String INPUT_TIME_LOG_MESSAGE = "Time to take input: ";
     private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.SECONDS);
 
-    private static int[] input;
-
     public static void main(String[] args) throws IOException {
         Log.enableLogging();
-        input = strToIntArr(rmsff(FILE_NAME)[0].split(","));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = rsi(br);
         while (T > 0) {
+            //int in = rsi(br);
             tl.startTracking();
             String res = getResult();
             tl.pauseTracking();
@@ -37,29 +36,56 @@ class $059_XORDecryption {
     }
 
     private static String getResult() {
-        return dechiperAndPrint(new char[]{'g', 'o', 'd'}) + "";
+        BigInteger[] cubes = new BigInteger[8385];
+        int cNeeded = 5;
+
+        for (int i = 0; i < cubes.length; i++) {
+            cubes[i] = new BigInteger(i + "");
+            cubes[i] = cubes[i].multiply(cubes[i].multiply(cubes[i]));
+        }
+        ArrayList<BigInteger> allCubes = new ArrayList<>(5);
+
+        for (int i = 0; i < cubes.length; i++) {
+            int c = 1;
+            allCubes.clear();
+            allCubes.add(cubes[i]);
+            for (int j = i + 1; j < cubes.length; j++) {
+                if (cubes[j].toString().length() == cubes[i].toString().length()) {
+                    if (areSameDigits(cubes[i], cubes[j])) {
+                        c++;
+                        allCubes.add(cubes[j]);
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            if (c == cNeeded) {
+                parli(allCubes);
+                break;
+            }
+        }
+        return "";
     }
 
-    private static int dechiperAndPrint(char[] key) {
-        int sum = 0;
-        for (int i = 0, k = 0; i < input.length; i++, k = (k + 1) % 3) {
-            int t = input[i] ^ key[k];
-            System.out.print((char) (t));
-            sum += t;
-        }
-        System.out.println();
+    private static boolean areSameDigits(BigInteger n1, BigInteger n2) {
+        int[] dp = new int[10];
 
-        return sum;
-    }
-
-    //Assumes str arr contains numbers
-    private static int[] strToIntArr(String[] arr) {
-        int[] intArr = new int[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            intArr[i] = i(arr[i]);
+        for (char c : n1.toString().toCharArray()) {
+            dp[c - '0']++;
         }
 
-        return intArr;
+        for (char c : n2.toString().toCharArray()) {
+            dp[c - '0']--;
+        }
+
+        for (int i : dp) {
+            if (i != 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //read multiple strings from a file
@@ -73,6 +99,16 @@ class $059_XORDecryption {
         }
 
         return litoStrArr(stringArrayList);
+    }
+
+    //Assumes str arr contains numbers
+    private static int[] strToIntArr(String[] arr) {
+        int[] intArr = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            intArr[i] = i(arr[i]);
+        }
+
+        return intArr;
     }
 
     //gets a buffered reader for a file, bufferred reader for a file

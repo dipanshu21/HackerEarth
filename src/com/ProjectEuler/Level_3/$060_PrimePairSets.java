@@ -1,25 +1,26 @@
-package com.ProjectEuler;
+package com.ProjectEuler.Level_3;
 
 import com.ProjectEuler.Utils.Log;
+import com.ProjectEuler.Utils.PrimeUtil;
 import com.ProjectEuler.Utils.TimeLogger;
 import com.ProjectEuler.Utils.TimeUnit;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 /**
- * Created by deepanshu on 13/06/16, 2:57 PM.
+ * Created by deepanshu on 28/05/16, 1:01 PM.
  */
-class $063_PowerfulDigitCounts {
+class $060_PrimePairSets {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final String FILE_NAME = ".txt";
     private static final String TESTCASE_TIME_LOG_MESSAGE = "Time to execute testcase: ";
     private static final String INPUT_TIME_LOG_MESSAGE = "Time to take input: ";
-    private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.MILLI_SECONDS);
+    public static int loopLimit = 1118;
+    private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.SECONDS);
 
     public static void main(String[] args) throws IOException {
         Log.enableLogging();
@@ -37,44 +38,91 @@ class $063_PowerfulDigitCounts {
     }
 
     private static String getResult() {
-        final BigInteger one = new BigInteger("1");
-        HashSet<String> numbers = new HashSet<>(1000);
-        BigInteger cur = new BigInteger("1");
+        int lim = 9000;
+        ArrayList<HashSet<Integer>> primeDp = getPrimeDP(lim);
+        ArrayList<Long> primes = PrimeUtil.primes;
+        long a, b, c, d, e;
+        a = b = c = d = e = 0;
+        long min = Integer.MAX_VALUE;
+        for (int i = 0; i < loopLimit - 4; i++) {
+            for (int j = i + 1; j < loopLimit - 3; j++) {
+                if (primeDp.get(i).contains(j)) {
+                    for (int k = j + 1; k < loopLimit - 2; k++) {
+                        if (primeDp.get(i).contains(k) && primeDp.get(j).contains(k)) {
+                            for (int l = k + 1; l < loopLimit - 1; l++) {
+                                if (primeDp.get(i).contains(l) && primeDp.get(j).contains(l)
+                                        && primeDp.get(k).contains(l)) {
+                                    for (int m = l + 1; m < loopLimit; m++) {
+                                        if (primeDp.get(i).contains(m) && primeDp.get(j).contains(m)
+                                                && primeDp.get(k).contains(m)
+                                                && primeDp.get(l).contains(m)) {
+                                            a = primes.get(i);
+                                            b = primes.get(j);
+                                            c = primes.get(k);
+                                            d = primes.get(l);
+                                            e = primes.get(m);
+                                            long sum = a + b + c + d + e;
+                                            if (sum < min) {
+                                                min = sum;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.printf("%5d %5d %5d %5d %5d\nSum: %d\n=======\n", a, b, c, d, e, min);
+        return "";
+    }
 
-        for (int i = 1; i < 10; i++) {
-            for (int j = 1; j < 22; j++) {
-                String t = pow(cur, j).toString();
-                if (t.length() == j) {
-                    numbers.add(t);
-                    //Log.logString(cur.toString() + "^" + j + "=> " + t);
-                } else {
-                    break;
+    private static ArrayList<HashSet<Integer>> getPrimeDP(int lim) {
+        PrimeUtil.generatePrimesUptoN(lim);
+        ArrayList<Long> primes = PrimeUtil.primes;
+
+        int[] powers = new int[]{0, 10, 100, 1000, 10000, 100000};
+        ArrayList<HashSet<Integer>> primeDp = new ArrayList<>();
+        int[] powerMultiple = new int[primes.size()];
+
+        for (int i = 0; i < primes.size(); i++) {
+            try {
+                powerMultiple[i] = powers[(int) Math.floor(Math.log10(primes.get(i))) + 1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        for (int i = 0; i < loopLimit; i++) {
+
+            HashSet<Integer> t = new HashSet<>(100);
+            long primeI = primes.get(i);
+
+            for (int j = i + 1; j < loopLimit; j++) {
+
+                long primeJ = primes.get(j);
+
+                try {
+
+                    int pre = (int) (primeI * powerMultiple[j] + primeJ);
+                    int post = (int) (primeJ * powerMultiple[i] + primeI);
+                    if (PrimeUtil.isPrime(pre) && PrimeUtil.isPrime(post)) {
+                        t.add(j);
+                    }
+
+                } catch (ArrayIndexOutOfBoundsException e) {
+
+                    e.printStackTrace();
+
                 }
             }
 
-            cur = cur.add(one);
+            primeDp.add(t);
         }
 
-        return numbers.size() + "";
-    }
-
-    private static BigInteger pow(BigInteger i, int pow) {
-        if (pow == 1) {
-            return i;
-        }
-
-        if (pow == 0) {
-            return new BigInteger("1");
-        }
-
-        BigInteger half = pow(i, pow / 2);
-        half = half.multiply(half);
-
-        if (pow % 2 != 0) {
-            half = half.multiply(i);
-        }
-
-        return half;
+        return primeDp;
     }
 
     //read multiple strings from a file

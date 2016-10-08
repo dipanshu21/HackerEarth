@@ -1,19 +1,19 @@
-package com.ProjectEuler;
+package com.ProjectEuler.Level_3;
 
 import com.ProjectEuler.Utils.Log;
 import com.ProjectEuler.Utils.TimeLogger;
 import com.ProjectEuler.Utils.TimeUnit;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by deepanshu on 26/06/16, 12:19 PM.
+ * Created by deepanshu on 13/06/16, 2:57 PM.
  */
-class $066_Diophantine_Equation {
+class $063_PowerfulDigitCounts {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final String FILE_NAME = ".txt";
@@ -37,45 +37,44 @@ class $066_Diophantine_Equation {
     }
 
     private static String getResult() {
-        int range = 100000000;
-        int d = 61;
+        final BigInteger one = new BigInteger("1");
+        HashSet<String> numbers = new HashSet<>(1000);
+        BigInteger cur = new BigInteger("1");
 
-        long[] squares = new long[range];
-        HashMap<Long, Long> squaresHash = new HashMap<>(range);
-        long t = 0;
-
-        for (long i = 0; i < squares.length; i++) {
-            t = i * i;
-            squares[(int) i] = t;
-            squaresHash.put(t, i);
-        }
-
-        long max = 0;
-        for (long i = 2; i <= d; i++) {
-            if (!squaresHash.containsKey(i)) {
-                long x = getMinXForD(squares, squaresHash, i);
-                if (max < x) {
-                    max = x;
+        for (int i = 1; i < 10; i++) {
+            for (int j = 1; j < 22; j++) {
+                String t = pow(cur, j).toString();
+                if (t.length() == j) {
+                    numbers.add(t);
+                    //Log.logString(cur.toString() + "^" + j + "=> " + t);
+                } else {
+                    break;
                 }
-                if (x == -243)
-                    Log.logString("not found: " + i);
             }
+
+            cur = cur.add(one);
         }
 
-        return max + "";
+        return numbers.size() + "";
     }
 
-    private static long getMinXForD(long[] sqrs, Map<Long, Long> sqrMap, long d) {
-        long x = -243;
-        long fac;
-        for (int y = 1; y < sqrs.length; y++) {
-            fac = (sqrs[y] * d) + 1;
-            if (sqrMap.containsKey(fac)) {
-                return sqrMap.get(fac);
-            }
+    private static BigInteger pow(BigInteger i, int pow) {
+        if (pow == 1) {
+            return i;
         }
 
-        return x;
+        if (pow == 0) {
+            return new BigInteger("1");
+        }
+
+        BigInteger half = pow(i, pow / 2);
+        half = half.multiply(half);
+
+        if (pow % 2 != 0) {
+            half = half.multiply(i);
+        }
+
+        return half;
     }
 
     //read multiple strings from a file

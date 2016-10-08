@@ -1,34 +1,32 @@
-package com.ProjectEuler;
+package com.ProjectEuler.Level_3;
 
 import com.ProjectEuler.Utils.Log;
-import com.ProjectEuler.Utils.MutableInteger;
+import com.ProjectEuler.Utils.StringUtil;
 import com.ProjectEuler.Utils.TimeLogger;
 import com.ProjectEuler.Utils.TimeUnit;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by deepanshu on 13/06/16, 4:14 PM.
+ * Created by deepanshu on 22/05/16, 4:46 PM.
  */
-class $064_OddPeriodSquareRoots {
+class $055_LychrelNumbers {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final String FILE_NAME = ".txt";
     private static final String TESTCASE_TIME_LOG_MESSAGE = "Time to execute testcase: ";
     private static final String INPUT_TIME_LOG_MESSAGE = "Time to take input: ";
-    private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.MILLI_SECONDS);
-    private static int[] squareRootCeil = new int[10001];
-    private static int[] squareRootFloor = new int[10001];
-    private static int[] squares = new int[101];
+    private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.SECONDS);
 
     public static void main(String[] args) throws IOException {
         Log.enableLogging();
+        tl.setTitleUnit("Testcase", TimeUnit.MILLI_SECONDS);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = rsi(br);
         while (T > 0) {
-            //int in = rsi(br);
             tl.startTracking();
             String res = getResult();
             tl.pauseTracking();
@@ -38,39 +36,36 @@ class $064_OddPeriodSquareRoots {
         }
     }
 
-    private static void fillDP() {
-        int prevSqr = 1;
-        int curSqr = 0;
-        squares[1] = 1;
-        for (int i = 2; i < 101; i++) {
-            curSqr = i * i;
-            squares[i] = curSqr;
-            squareRootCeil[curSqr] = squareRootFloor[curSqr] = -1;
-            for (int j = prevSqr + 1; j < curSqr; j++) {
-                squareRootFloor[j] = i - 1;
-                squareRootCeil[j] = i;
-            }
-            prevSqr = curSqr;
-        }
-    }
-
     private static String getResult() {
-        fillDP();
+        final int lim = 10001;
+        final int iter_lim = 50;
+        int count = 0;
 
-        return "";
+        for (int i = 1; i < lim; i++) {
+            int j = 0;
+            BigInteger prev = new BigInteger(i + "");
+            BigInteger rev = reverseBigInt(prev);
+            while (j < iter_lim) {
+                BigInteger newNum = prev.add(rev);
+                rev = reverseBigInt(newNum);
+                prev = newNum;
+                if (newNum.toString().equals(rev.toString())) {
+                    Log.logString("#" + i);
+                    Log.logString("Iteration: " + (j + 1));
+                    Log.logString(newNum.toString());
+                    Log.logString("");
+                    count++;
+                    break;
+                }
+                j++;
+            }
+        }
+        return 10000 - count + "";
     }
 
-    private static void getNextTermAndAlpha(int numerator, int n, int sub, MutableInteger alpha, MutableInteger newSub, MutableInteger newNumerator) {
-        MutableInteger newDenom = new MutableInteger();
-        changeForm(n, sub, numerator, newDenom);
-
+    public static BigInteger reverseBigInt(BigInteger bi) {
+        return new BigInteger(StringUtil.reverseString(bi.toString()));
     }
-
-    private static void changeForm(int n, int alpha, int numerater, MutableInteger newDenom) {
-        int denom = n - alpha * alpha;
-        newDenom.n = denom / numerater;
-    }
-
 
     //read multiple strings from a file
     private static String[] rmsff(String fileName) throws IOException {
@@ -83,16 +78,6 @@ class $064_OddPeriodSquareRoots {
         }
 
         return litoStrArr(stringArrayList);
-    }
-
-    //Assumes str arr contains numbers
-    private static int[] strToIntArr(String[] arr) {
-        int[] intArr = new int[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            intArr[i] = i(arr[i]);
-        }
-
-        return intArr;
     }
 
     //gets a buffered reader for a file, bufferred reader for a file
