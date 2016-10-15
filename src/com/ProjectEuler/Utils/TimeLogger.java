@@ -73,6 +73,10 @@ public class TimeLogger {
     }
 
     public void logSoFar() {
+        logSoFar(title);
+    }
+
+    public void logSoFar(String title) {
         logElapsed(title, elapsedSoFar);
     }
 

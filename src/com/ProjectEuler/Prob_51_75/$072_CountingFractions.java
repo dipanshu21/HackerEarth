@@ -1,8 +1,6 @@
 package com.ProjectEuler.Prob_51_75;
 
-import com.ProjectEuler.Utils.Log;
-import com.ProjectEuler.Utils.TimeLogger;
-import com.ProjectEuler.Utils.TimeUnit;
+import com.ProjectEuler.Utils.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,18 +11,20 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 09/10/16, 10:56.
+ * Created by deepanshu on 15/10/16, 21:29.
  */
-class $069_TotientMaximum {
+class $072_CountingFractions {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final String FILE_NAME = ".txt";
     private static final String TESTCASE_TIME_LOG_MESSAGE = "Time to execute testcase: ";
     private static final String INPUT_TIME_LOG_MESSAGE = "Time to take input: ";
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
+    public static int[] dp = new int[1000001];
     private static FastScanner fsc = null;
     private static PrintWriter out = new PrintWriter(System.out);
     private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.SECONDS, out);
+    private static ArrayList<Long> primes = null;
 
     public static void main(String[] args) throws Exception {
         //initFileScanner();
@@ -57,7 +57,75 @@ class $069_TotientMaximum {
     }
 
     private static String getResult() {
-        return "";
+        PrimeUtil.generatePrimesUptoN(1000000);
+        primes = PrimeUtil.primes;
+
+        //Marking all the primes to n-1
+        for (int i = 0; i < primes.size() - 1; i++) {
+            int prime = primes.get(i).intValue();
+            dp[prime] = prime - 1;
+        }
+
+        for (int i = 0; i < 1050; i++) {
+            dp[i] = coutRelativePrimesBruteForce(i);
+        }
+
+        //calculating remaining using dp
+        for (int i = 1000000; i > 2; i--) {
+            if (dp[i] == 0) {
+                countRelativePrimes(i);
+            }
+        }
+
+        long countFractions = 0;
+
+        for (int i : dp) {
+            countFractions += i;
+        }
+
+        return countFractions + "";
+    }
+
+    public static int countRelativePrimes(int n) {
+
+        if (dp[n] == 0) {
+            if ((n & 1) == 0) {
+                int half = n / 2, relativePrimeHalf = countRelativePrimes(half);
+                dp[n] = (half & 1) == 0 ? 2 * relativePrimeHalf : relativePrimeHalf;
+            } else {
+                int divisor = 0;
+                int divident = 0;
+                for (Long p : primes) {
+                    int t = p.intValue();
+                    if (n % t == 0) {
+                        divisor = t;
+                        divident = n / t;
+                        break;
+                    }
+                }
+
+                int rpsDvsr = countRelativePrimes(divisor), rpsDvdnt = countRelativePrimes(divident);
+                int gcd = GCDUtil.gcdNum(divisor, divident);
+                if (gcd == 1) {
+                    dp[n] = rpsDvdnt * rpsDvsr;
+                } else {
+                    dp[n] = (rpsDvdnt * rpsDvsr * gcd) / (countRelativePrimes(gcd));
+                }
+            }
+        }
+
+        return dp[n];
+    }
+
+    public static int coutRelativePrimesBruteForce(int n) {
+        int c = 0;
+        for (int i = 1; i < n; i++) {
+            if (GCDUtil.gcdNum(i, n) == 1) {
+                c++;
+            }
+        }
+
+        return c;
     }
 
     private static long factorial(int num) {

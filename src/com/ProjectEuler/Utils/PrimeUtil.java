@@ -86,6 +86,13 @@ public class PrimeUtil {
         }
     }
 
+    /**
+     * Generates primes upto n and stores individual primes in primes arraylist also returns a boolean array
+     * containing false at the index of the number which is prime.
+     *
+     * @param n
+     * @return
+     */
     public static boolean[] generatePrimesUptoNSieve(int n) {
         primes.clear();
         primes = new ArrayList<>(n / 1000);
@@ -106,6 +113,12 @@ public class PrimeUtil {
         return sieve;
     }
 
+    /**
+     * Generates primes upto n and returns a boolean array
+     * containing false at the index of the number which is prime.
+     * @param n
+     * @return
+     */
     public static boolean[] generatePrimesUptoNSieveReturnDP(int n) {
         boolean[] sieve = new boolean[n];
         sieve[1] = true;
