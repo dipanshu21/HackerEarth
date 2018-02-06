@@ -8,19 +8,21 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 19:05.
+ * Created by deepanshu on 06/02/18, 20:05.
  */
-class MonksTakesAWalk {
+class MannasFirstName {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
+    private static final String SUVO = "SUVO";
+    private static final String JIT = "JIT";
+    private static final String formatter = SUVO + " = %d, " + SUVO + JIT + " = %d";
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
         int T = sc.nextInt();
         while (T > 0) {
-            String in = sc.next();
-            String res = getResult(in);
+            String res = getResult(sc.nextLine());
             out.println(res);
             T--;
         }
@@ -28,16 +30,36 @@ class MonksTakesAWalk {
     }
 
     private static String getResult(String in) {
-        int count = 0;
+        int suvo = 0;
+        int suvojit = 0;
 
-        for (char c : in.toCharArray()) {
-            c = Character.toUpperCase(c);
-            if (c == 'A' || c == 'I' || c == 'E' || c == 'O' || c == 'U') {
-                count++;
+        for (int i = 0; i < in.length(); i++) {
+            if (isPresent(in, i, SUVO)) {
+                suvo++;
+                i += 3;
+                if (isPresent(in, i + 1, JIT)) {
+                    suvojit++;
+                    suvo--;
+                    i += 3;
+                }
             }
         }
 
-        return count + "";
+        return String.format(formatter, suvo, suvojit);
+    }
+
+    private static boolean isPresent(String source, int startIndex, String search) {
+        if ((startIndex + search.length() - 1) >= source.length()) {
+            return false;
+        }
+
+        for (int i = 0; i < search.length(); i++, startIndex++) {
+            if (search.charAt(i) != source.charAt(startIndex)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static long factorial(int num) {
@@ -135,7 +157,7 @@ class MonksTakesAWalk {
     }
 
     private static class FastScanner {
-        BufferedReader in;
+        public BufferedReader in;
         StringTokenizer st;
 
         public FastScanner(BufferedReader in) {
@@ -151,6 +173,10 @@ class MonksTakesAWalk {
 
         public String next() throws Exception {
             return nextToken();
+        }
+
+        public String nextLine() throws Exception {
+            return in.readLine();
         }
 
         public int nextInt() throws Exception {

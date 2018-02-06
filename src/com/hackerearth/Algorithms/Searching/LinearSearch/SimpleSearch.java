@@ -8,36 +8,34 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 19:05.
+ * Created by deepanshu on 06/02/18, 20:56.
  */
-class MonksTakesAWalk {
+class SimpleSearch {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        while (T > 0) {
-            String in = sc.next();
-            String res = getResult(in);
-            out.println(res);
-            T--;
-        }
+        int N = sc.nextInt();
+        int[] numbers = sc.nextInt(N);
+        int k = sc.nextInt();
+        String res = getResult(numbers, k);
+        out.println(res);
         out.close();
     }
 
-    private static String getResult(String in) {
-        int count = 0;
+    private static String getResult(int[] arr, int k) {
+        int i = -1;
 
-        for (char c : in.toCharArray()) {
-            c = Character.toUpperCase(c);
-            if (c == 'A' || c == 'I' || c == 'E' || c == 'O' || c == 'U') {
-                count++;
+        for (int j = 0; j < arr.length; j++) {
+            if (arr[j] == k) {
+                i = j;
+                break;
             }
         }
 
-        return count + "";
+        return i + "";
     }
 
     private static long factorial(int num) {

@@ -8,36 +8,60 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 19:05.
+ * Created by deepanshu on 06/02/18, 21:13.
  */
-class MonksTakesAWalk {
+class MinMax {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        while (T > 0) {
-            String in = sc.next();
-            String res = getResult(in);
-            out.println(res);
-            T--;
-        }
+        int N = sc.nextInt();
+        int[] nums = sc.nextInt(N);
+        String res = getResult(nums);
+        out.println(res);
         out.close();
     }
 
-    private static String getResult(String in) {
-        int count = 0;
+    private static String getResult(int[] nums) {
+        int sum = sum(nums);
 
-        for (char c : in.toCharArray()) {
-            c = Character.toUpperCase(c);
-            if (c == 'A' || c == 'I' || c == 'E' || c == 'O' || c == 'U') {
-                count++;
+        return (sum - max(nums)) + " " + (sum - min(nums));
+    }
+
+    private static int min(int[] num) {
+        int m = num[0];
+
+        for (int i : num) {
+            if (i < m) {
+                m = i;
             }
         }
 
-        return count + "";
+        return m;
+    }
+
+    private static int max(int[] num) {
+        int m = num[0];
+
+        for (int i : num) {
+            if (i > m) {
+                m = i;
+            }
+        }
+
+        return m;
+    }
+
+    private static int sum(int[] num) {
+        int m = 0;
+
+        for (int i : num) {
+            m += i;
+        }
+
+        return m;
     }
 
     private static long factorial(int num) {

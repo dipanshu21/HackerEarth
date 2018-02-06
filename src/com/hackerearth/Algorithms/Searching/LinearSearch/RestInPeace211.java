@@ -8,36 +8,34 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 19:05.
+ * Created by deepanshu on 06/02/18, 21:28.
  */
-class MonksTakesAWalk {
+class RestInPeace211 {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
+    private static final String STREAK = "The streak lives still in our heart!";
+    private static final String NO_STREAK = "The streak is broken!";
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
         int T = sc.nextInt();
         while (T > 0) {
-            String in = sc.next();
-            String res = getResult(in);
+            String res = getResult(sc.nextInt());
             out.println(res);
             T--;
         }
         out.close();
     }
 
-    private static String getResult(String in) {
-        int count = 0;
+    private static String getResult(int num) {
+        int index2 = (num + "").indexOf("21");
 
-        for (char c : in.toCharArray()) {
-            c = Character.toUpperCase(c);
-            if (c == 'A' || c == 'I' || c == 'E' || c == 'O' || c == 'U') {
-                count++;
-            }
+        if (index2 != -1 || num % 21 == 0) {
+            return NO_STREAK;
         }
 
-        return count + "";
+        return STREAK;
     }
 
     private static long factorial(int num) {

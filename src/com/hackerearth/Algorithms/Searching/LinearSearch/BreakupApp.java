@@ -8,36 +8,63 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 19:05.
+ * Created by deepanshu on 06/02/18, 19:15.
  */
-class MonksTakesAWalk {
+class BreakupApp {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        while (T > 0) {
-            String in = sc.next();
-            String res = getResult(in);
-            out.println(res);
-            T--;
+        int N = sc.nextInt();
+        int[] dateWeight = new int[32];
+        while (N > 0) {
+            setWeight(dateWeight, sc.nextLine());
+            N--;
         }
+        out.println(getResult(dateWeight));
         out.close();
     }
 
-    private static String getResult(String in) {
-        int count = 0;
+    private static void setWeight(int[] dateWeight, String input) {
+        int weightFactor = 1;
+        if (input.startsWith("G")) {
+            weightFactor = 2;
+        }
 
-        for (char c : in.toCharArray()) {
-            c = Character.toUpperCase(c);
-            if (c == 'A' || c == 'I' || c == 'E' || c == 'O' || c == 'U') {
-                count++;
+        String[] tokens = input.split("\\s+");
+        for (String t : tokens) {
+            try {
+                int date = Integer.parseInt(t);
+                if (date > 0 && date < 31) {
+                    dateWeight[date] += weightFactor;
+                }
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    private static String getResult(int[] dateWeight) {
+        int max = 0;
+        int maxIndex = -1;
+        String result = "No Date";
+
+        for (int i = 0; i < dateWeight.length; i++) {
+            int w = dateWeight[i];
+            if (w > max) {
+                max = w;
+                maxIndex = i;
+            } else if (w == max) {
+                maxIndex = -1;
             }
         }
 
-        return count + "";
+        if (maxIndex == 19 || maxIndex == 20) {
+            result = "Date";
+        }
+        return result;
     }
 
     private static long factorial(int num) {
@@ -151,6 +178,10 @@ class MonksTakesAWalk {
 
         public String next() throws Exception {
             return nextToken();
+        }
+
+        public String nextLine() throws Exception {
+            return in.readLine();
         }
 
         public int nextInt() throws Exception {

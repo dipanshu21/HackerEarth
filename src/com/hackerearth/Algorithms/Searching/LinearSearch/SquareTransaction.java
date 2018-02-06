@@ -8,36 +8,37 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 19:05.
+ * Created by deepanshu on 06/02/18, 20:56.
  */
-class MonksTakesAWalk {
+class SquareTransaction {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        while (T > 0) {
-            String in = sc.next();
-            String res = getResult(in);
+        int N = sc.nextInt();
+        int[] numbers = sc.nextInt(N);
+        int q = sc.nextInt();
+        while (q > 0) {
+            String res = getResult(numbers, sc.nextInt());
             out.println(res);
-            T--;
+            q--;
         }
         out.close();
     }
 
-    private static String getResult(String in) {
-        int count = 0;
+    private static String getResult(int[] arr, int k) {
+        int sum = 0;
 
-        for (char c : in.toCharArray()) {
-            c = Character.toUpperCase(c);
-            if (c == 'A' || c == 'I' || c == 'E' || c == 'O' || c == 'U') {
-                count++;
+        for (int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            if (sum >= k) {
+                return (i + 1) + "";
             }
         }
 
-        return count + "";
+        return "-1";
     }
 
     private static long factorial(int num) {
