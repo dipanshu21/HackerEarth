@@ -1,4 +1,4 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch;
+package com.hackerearth.Algorithms.Searching.LinearSearch.E;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 21:13.
+ * Created by deepanshu on 06/02/18, 19:15.
  */
-class MinMax {
+class BreakupApp {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
@@ -18,50 +18,53 @@ class MinMax {
 
     public static void main(String[] args) throws Exception {
         int N = sc.nextInt();
-        int[] nums = sc.nextInt(N);
-        String res = getResult(nums);
-        out.println(res);
+        int[] dateWeight = new int[32];
+        while (N > 0) {
+            setWeight(dateWeight, sc.nextLine());
+            N--;
+        }
+        out.println(getResult(dateWeight));
         out.close();
     }
 
-    private static String getResult(int[] nums) {
-        int sum = sum(nums);
+    private static void setWeight(int[] dateWeight, String input) {
+        int weightFactor = 1;
+        if (input.startsWith("G")) {
+            weightFactor = 2;
+        }
 
-        return (sum - max(nums)) + " " + (sum - min(nums));
+        String[] tokens = input.split("\\s+");
+        for (String t : tokens) {
+            try {
+                int date = Integer.parseInt(t);
+                if (date > 0 && date < 31) {
+                    dateWeight[date] += weightFactor;
+                }
+            } catch (Exception e) {
+
+            }
+        }
     }
 
-    private static int min(int[] num) {
-        int m = num[0];
+    private static String getResult(int[] dateWeight) {
+        int max = 0;
+        int maxIndex = -1;
+        String result = "No Date";
 
-        for (int i : num) {
-            if (i < m) {
-                m = i;
+        for (int i = 0; i < dateWeight.length; i++) {
+            int w = dateWeight[i];
+            if (w > max) {
+                max = w;
+                maxIndex = i;
+            } else if (w == max) {
+                maxIndex = -1;
             }
         }
 
-        return m;
-    }
-
-    private static int max(int[] num) {
-        int m = num[0];
-
-        for (int i : num) {
-            if (i > m) {
-                m = i;
-            }
+        if (maxIndex == 19 || maxIndex == 20) {
+            result = "Date";
         }
-
-        return m;
-    }
-
-    private static int sum(int[] num) {
-        int m = 0;
-
-        for (int i : num) {
-            m += i;
-        }
-
-        return m;
+        return result;
     }
 
     private static long factorial(int num) {
@@ -175,6 +178,10 @@ class MinMax {
 
         public String next() throws Exception {
             return nextToken();
+        }
+
+        public String nextLine() throws Exception {
+            return in.readLine();
         }
 
         public int nextInt() throws Exception {

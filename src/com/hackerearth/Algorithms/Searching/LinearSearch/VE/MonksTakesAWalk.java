@@ -1,4 +1,4 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch;
+package com.hackerearth.Algorithms.Searching.LinearSearch.VE;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 22:08.
+ * Created by deepanshu on 06/02/18, 19:05.
  */
-class PolicemanAndThieves {
+class MonksTakesAWalk {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
@@ -19,48 +19,25 @@ class PolicemanAndThieves {
     public static void main(String[] args) throws Exception {
         int T = sc.nextInt();
         while (T > 0) {
-            int n = sc.nextInt();
-            int k = sc.nextInt();
-            Boolean[][] arr = getInput(n);
-            String res = getResult(arr, k);
+            String in = sc.next();
+            String res = getResult(in);
             out.println(res);
             T--;
         }
         out.close();
     }
 
-    private static Boolean[][] getInput(int n) throws Exception {
-        Boolean[][] arr = new Boolean[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                arr[i][j] = sc.next().startsWith("P");
-            }
-        }
-        return arr;
-    }
+    private static String getResult(String in) {
+        int count = 0;
 
-    private static String getResult(Boolean[][] arr, int k) {
-        int t = 0;
-
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr[i].length; j++) {
-                if (arr[i][j] != null && arr[i][j]) {
-                    int minStart = Math.max(j - k, 0);
-                    int maxEnd = Math.min(arr[i].length - 1, j + k);
-                    while (minStart <= maxEnd) {
-                        if (arr[i][minStart] != null && !arr[i][minStart]) {
-                            arr[i][j] = null;
-                            arr[i][minStart] = null;
-                            t++;
-                            break;
-                        }
-                        minStart++;
-                    }
-                }
+        for (char c : in.toCharArray()) {
+            c = Character.toUpperCase(c);
+            if (c == 'A' || c == 'I' || c == 'E' || c == 'O' || c == 'U') {
+                count++;
             }
         }
 
-        return t + "";
+        return count + "";
     }
 
     private static long factorial(int num) {

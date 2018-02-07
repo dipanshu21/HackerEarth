@@ -1,41 +1,67 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch;
+package com.hackerearth.Algorithms.Searching.LinearSearch.M;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
- * Created by deepanshu on 06/02/18, 21:28.
+ * Created by deepanshu on 07/02/18, 08:23.
  */
-class RestInPeace211 {
+class TheNormalType {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
-    private static final String STREAK = "The streak lives still in our heart!";
-    private static final String NO_STREAK = "The streak is broken!";
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        while (T > 0) {
-            String res = getResult(sc.nextInt());
-            out.println(res);
-            T--;
-        }
+        int N = sc.nextInt();
+        int[] nums = sc.nextInt(N);
+        String res = getResult(nums);
+        out.println(res);
         out.close();
     }
 
-    private static String getResult(int num) {
-        int index2 = (num + "").indexOf("21");
+    private static String getResult(int[] nums) {
+        HashSet<Integer> set = new HashSet<>(10000);
 
-        if (index2 != -1 || num % 21 == 0) {
-            return NO_STREAK;
+        for (int a : nums) {
+            set.add(a);
         }
 
-        return STREAK;
+        int uniqueElements = set.size();
+        long subArrCount = 0;
+
+        HashMap<Integer, Integer> map = new HashMap<>(uniqueElements);
+        int endIndex = 0;
+        for (int i = 0; i < nums.length; i++) {
+            while (endIndex < nums.length && map.keySet().size() < uniqueElements) {
+                int e = nums[endIndex];
+                int f = 1;
+                if (map.containsKey(e)) {
+                    f = map.get(e) + 1;
+                }
+
+                map.put(e, f);
+                endIndex++;
+            }
+
+            if (map.keySet().size() == uniqueElements) {
+                subArrCount += (nums.length - endIndex + 1);
+            } else {
+                break;
+            }
+
+            int e = nums[i];
+            int f = map.get(e);
+            if (f == 1) {
+                map.remove(e);
+            } else {
+                map.put(e, f - 1);
+            }
+        }
+
+        return subArrCount + "";
     }
 
     private static long factorial(int num) {

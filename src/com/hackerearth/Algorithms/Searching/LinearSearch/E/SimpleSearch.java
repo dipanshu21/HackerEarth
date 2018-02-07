@@ -1,95 +1,41 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch;
+package com.hackerearth.Algorithms.Searching.LinearSearch.E;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 07/02/18, 09:14.
+ * Created by deepanshu on 06/02/18, 20:56.
  */
-class HolidaySeason {
+class SimpleSearch {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        String s = sc.next();
-        String res = getResult(s);
+        int N = sc.nextInt();
+        int[] numbers = sc.nextInt(N);
+        int k = sc.nextInt();
+        String res = getResult(numbers, k);
         out.println(res);
         out.close();
     }
 
-    private static String getResult(String s) {
-        HashMap<Character, ArrayList<Integer>> map = new HashMap<>();
+    private static String getResult(int[] arr, int k) {
+        int i = -1;
 
-        int cnt = 0;
-        char[] ch = s.toCharArray();
-
-        for (int i = 0; i < ch.length; i++) {
-            if (!map.containsKey(ch[i])) {
-                map.put(ch[i], new ArrayList<>(100));
-            }
-
-            map.get(ch[i]).add(i);
-        }
-
-        for (int a = 0; a < ch.length; a++) {
-            ArrayList<Integer> indexesA = map.get(ch[a]);
-            int ceilA = binaryCeil(indexesA, a);
-            for (int ai = ceilA; ai > 0 && ai < indexesA.size(); ai++) {
-                int c = indexesA.get(ai);
-                if (a < c) {
-                    for (int b = a + 1; b < c; b++) {
-                        ArrayList<Integer> indexesB = map.get(ch[b]);
-                        int ceilB = binaryCeil(indexesB, c);
-                        for (int bi = ceilB; bi > 0 && bi < indexesB.size(); bi++) {
-                            int d = indexesB.get(bi);
-                            if (d > c) {
-                                cnt++;
-                            }
-                        }
-                    }
-                }
+        for (int j = 0; j < arr.length; j++) {
+            if (arr[j] == k) {
+                i = j;
+                break;
             }
         }
 
-        return cnt + "";
-    }
-
-    private static int binaryCeil(ArrayList<Integer> ele, int e) {
-        int l = 0;
-        int h = ele.size() - 1;
-        int len = ele.size() - 1;
-
-        while (l < h) {
-            int m = l + ((h - l) / 2);
-
-            if (ele.get(m) == e) {
-                if (m != len) {
-                    return m + 1;
-                } else {
-                    return -1;
-                }
-            } else if (ele.get(m) > e) {
-                if (m > 0 && ele.get(m - 1) < e) {
-                    return m;
-                }
-                h = m;
-            } else {
-                if (m != len && ele.get(m + 1) > e) {
-                    return m + 1;
-                }
-                l = m + 1;
-            }
-        }
-
-        return -1;
+        return i + "";
     }
 
     private static long factorial(int num) {

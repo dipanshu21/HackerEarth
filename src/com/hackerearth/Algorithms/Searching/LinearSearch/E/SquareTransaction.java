@@ -1,4 +1,4 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch;
+package com.hackerearth.Algorithms.Searching.LinearSearch.E;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 19:15.
+ * Created by deepanshu on 06/02/18, 20:56.
  */
-class BreakupApp {
+class SquareTransaction {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
@@ -18,53 +18,27 @@ class BreakupApp {
 
     public static void main(String[] args) throws Exception {
         int N = sc.nextInt();
-        int[] dateWeight = new int[32];
-        while (N > 0) {
-            setWeight(dateWeight, sc.nextLine());
-            N--;
+        int[] numbers = sc.nextInt(N);
+        int q = sc.nextInt();
+        while (q > 0) {
+            String res = getResult(numbers, sc.nextInt());
+            out.println(res);
+            q--;
         }
-        out.println(getResult(dateWeight));
         out.close();
     }
 
-    private static void setWeight(int[] dateWeight, String input) {
-        int weightFactor = 1;
-        if (input.startsWith("G")) {
-            weightFactor = 2;
-        }
+    private static String getResult(int[] arr, int k) {
+        int sum = 0;
 
-        String[] tokens = input.split("\\s+");
-        for (String t : tokens) {
-            try {
-                int date = Integer.parseInt(t);
-                if (date > 0 && date < 31) {
-                    dateWeight[date] += weightFactor;
-                }
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
-    private static String getResult(int[] dateWeight) {
-        int max = 0;
-        int maxIndex = -1;
-        String result = "No Date";
-
-        for (int i = 0; i < dateWeight.length; i++) {
-            int w = dateWeight[i];
-            if (w > max) {
-                max = w;
-                maxIndex = i;
-            } else if (w == max) {
-                maxIndex = -1;
+        for (int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+            if (sum >= k) {
+                return (i + 1) + "";
             }
         }
 
-        if (maxIndex == 19 || maxIndex == 20) {
-            result = "Date";
-        }
-        return result;
+        return "-1";
     }
 
     private static long factorial(int num) {
@@ -178,10 +152,6 @@ class BreakupApp {
 
         public String next() throws Exception {
             return nextToken();
-        }
-
-        public String nextLine() throws Exception {
-            return in.readLine();
         }
 
         public int nextInt() throws Exception {

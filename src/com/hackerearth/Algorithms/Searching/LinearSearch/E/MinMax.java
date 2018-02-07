@@ -1,14 +1,16 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch;
+package com.hackerearth.Algorithms.Searching.LinearSearch.E;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 07/02/18, 08:23.
+ * Created by deepanshu on 06/02/18, 21:13.
  */
-class TheNormalType {
+class MinMax {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
@@ -23,45 +25,43 @@ class TheNormalType {
     }
 
     private static String getResult(int[] nums) {
-        HashSet<Integer> set = new HashSet<>(10000);
+        int sum = sum(nums);
 
-        for (int a : nums) {
-            set.add(a);
-        }
+        return (sum - max(nums)) + " " + (sum - min(nums));
+    }
 
-        int uniqueElements = set.size();
-        long subArrCount = 0;
+    private static int min(int[] num) {
+        int m = num[0];
 
-        HashMap<Integer, Integer> map = new HashMap<>(uniqueElements);
-        int endIndex = 0;
-        for (int i = 0; i < nums.length; i++) {
-            while (endIndex < nums.length && map.keySet().size() < uniqueElements) {
-                int e = nums[endIndex];
-                int f = 1;
-                if (map.containsKey(e)) {
-                    f = map.get(e) + 1;
-                }
-
-                map.put(e, f);
-                endIndex++;
-            }
-
-            if (map.keySet().size() == uniqueElements) {
-                subArrCount += (nums.length - endIndex + 1);
-            } else {
-                break;
-            }
-
-            int e = nums[i];
-            int f = map.get(e);
-            if (f == 1) {
-                map.remove(e);
-            } else {
-                map.put(e, f - 1);
+        for (int i : num) {
+            if (i < m) {
+                m = i;
             }
         }
 
-        return subArrCount + "";
+        return m;
+    }
+
+    private static int max(int[] num) {
+        int m = num[0];
+
+        for (int i : num) {
+            if (i > m) {
+                m = i;
+            }
+        }
+
+        return m;
+    }
+
+    private static int sum(int[] num) {
+        int m = 0;
+
+        for (int i : num) {
+            m += i;
+        }
+
+        return m;
     }
 
     private static long factorial(int num) {

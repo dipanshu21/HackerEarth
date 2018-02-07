@@ -1,4 +1,4 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch;
+package com.hackerearth.Algorithms.Searching.LinearSearch.E;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,34 +8,58 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 06/02/18, 20:56.
+ * Created by deepanshu on 06/02/18, 20:05.
  */
-class SimpleSearch {
+class MannasFirstName {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
+    private static final String SUVO = "SUVO";
+    private static final String JIT = "JIT";
+    private static final String formatter = SUVO + " = %d, " + SUVO + JIT + " = %d";
     private static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int N = sc.nextInt();
-        int[] numbers = sc.nextInt(N);
-        int k = sc.nextInt();
-        String res = getResult(numbers, k);
-        out.println(res);
+        int T = sc.nextInt();
+        while (T > 0) {
+            String res = getResult(sc.nextLine());
+            out.println(res);
+            T--;
+        }
         out.close();
     }
 
-    private static String getResult(int[] arr, int k) {
-        int i = -1;
+    private static String getResult(String in) {
+        int suvo = 0;
+        int suvojit = 0;
 
-        for (int j = 0; j < arr.length; j++) {
-            if (arr[j] == k) {
-                i = j;
-                break;
+        for (int i = 0; i < in.length(); i++) {
+            if (isPresent(in, i, SUVO)) {
+                suvo++;
+                i += 3;
+                if (isPresent(in, i + 1, JIT)) {
+                    suvojit++;
+                    suvo--;
+                    i += 3;
+                }
             }
         }
 
-        return i + "";
+        return String.format(formatter, suvo, suvojit);
+    }
+
+    private static boolean isPresent(String source, int startIndex, String search) {
+        if ((startIndex + search.length() - 1) >= source.length()) {
+            return false;
+        }
+
+        for (int i = 0; i < search.length(); i++, startIndex++) {
+            if (search.charAt(i) != source.charAt(startIndex)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static long factorial(int num) {
@@ -133,7 +157,7 @@ class SimpleSearch {
     }
 
     private static class FastScanner {
-        BufferedReader in;
+        public BufferedReader in;
         StringTokenizer st;
 
         public FastScanner(BufferedReader in) {
@@ -149,6 +173,10 @@ class SimpleSearch {
 
         public String next() throws Exception {
             return nextToken();
+        }
+
+        public String nextLine() throws Exception {
+            return in.readLine();
         }
 
         public int nextInt() throws Exception {
