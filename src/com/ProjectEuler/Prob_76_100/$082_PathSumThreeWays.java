@@ -1,99 +1,112 @@
-package com.hackerearth.Algorithms.Searching.LinearSearch.M;
+package com.ProjectEuler.Prob_76_100;
+
+import com.ProjectEuler.Utils.Log;
+import com.ProjectEuler.Utils.TimeLogger;
+import com.ProjectEuler.Utils.TimeUnit;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 07/02/18, 09:14.
+ * Created by deepanshu on 25/08/16, 7:16 PM.
  */
-class HolidaySeason {
+class $082_PathSumThreeWays {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
+    private static final String FILE_NAME = "p082_matrix.txt";
+    private static final String TESTCASE_TIME_LOG_MESSAGE = "Time to execute testcase: ";
+    private static final String INPUT_TIME_LOG_MESSAGE = "Time to take input: ";
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
+    private static FastScanner fsc = null;
     private static PrintWriter out = new PrintWriter(System.out);
+    private static TimeLogger tl = new TimeLogger(TESTCASE_TIME_LOG_MESSAGE, TimeUnit.SECONDS, out);
 
     public static void main(String[] args) throws Exception {
-        int T = sc.nextInt();
-        String s = sc.next();
-        String res = getResult(s);
-        out.println(res);
-        out.close();
+        initFileScanner();
+        Log.enableLogging();
+        tl.startTracking();
+        String res = getResult(readMatrix());
+        tl.pauseTracking();
+        print(res);
+        tl.stopTrackingAndLog();
+        if (out != null) {
+            out.close();
+        }
     }
 
-    private static String getResult(String s) {
-        HashMap<Character, ArrayList<Integer>> map = new HashMap<>();
+    private static int[][] readMatrix() throws Exception {
+        int[][] matrix = new int[80][80];
+        String[] lines = fsc.next(80);
 
-        int cnt = 0;
-        char[] ch = s.toCharArray();
-
-        for (int i = 0; i < ch.length; i++) {
-            if (!map.containsKey(ch[i])) {
-                map.put(ch[i], new ArrayList<Integer>(100));
-            }
-
-            map.get(ch[i]).add(i);
-        }
-
-        if (map.keySet().size() == 1 && ch.length == 2000) {
-            return 664668499500l + "";
-        }
-
-        for (int a = 0; a < ch.length; a++) {
-            ArrayList<Integer> indexesA = map.get(ch[a]);
-            int ceilA = binaryCeil(indexesA, a);
-            for (int ai = ceilA; ai > 0 && ai < indexesA.size(); ai++) {
-                int c = indexesA.get(ai);
-                if (a < c) {
-                    for (int b = a + 1; b < c; b++) {
-                        ArrayList<Integer> indexesB = map.get(ch[b]);
-                        int ceilB = binaryCeil(indexesB, c);
-                        for (int bi = ceilB; bi > 0 && bi < indexesB.size(); bi++) {
-                            int d = indexesB.get(bi);
-                            if (d > c) {
-                                cnt++;
-                            }
-                        }
-                    }
-                }
+        for (int i = 0; i < matrix.length; i++) {
+            String[] values = lines[i].split(",");
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = Integer.parseInt(values[j]);
             }
         }
 
-        return cnt + "";
+        return matrix;
     }
 
-    private static int binaryCeil(ArrayList<Integer> ele, int e) {
-        int l = 0;
-        int h = ele.size() - 1;
-        int len = ele.size() - 1;
+    private static void print(String str) {
+        if (out == null) {
+            System.out.println(str);
+        } else {
+            out.println(str);
+        }
+    }
 
-        while (l < h) {
-            int m = l + ((h - l) / 2);
+    private static void initFileScanner() throws Exception {
+        fsc = new FastScanner(new BufferedReader(new FileReader(FILE_NAME)));
+    }
 
-            if (ele.get(m) == e) {
-                if (m != len) {
-                    return m + 1;
-                } else {
-                    return -1;
-                }
-            } else if (ele.get(m) > e) {
-                if (m > 0 && ele.get(m - 1) < e) {
-                    return m;
-                }
-                h = m;
-            } else {
-                if (m != len && ele.get(m + 1) > e) {
-                    return m + 1;
-                }
-                l = m + 1;
-            }
+    private static String getResult(int[][] matrix) {
+        List<Integer> min = new ArrayList<>(1);
+        boolean[][] visited = new boolean[matrix.length][matrix.length];
+
+        for (int i = 0; i < matrix.length; i++) {
+            findMin(matrix, i, 0, 0, min, visited);
+            tl.logSoFar("Testcase " + i + ": ");
         }
 
-        return -1;
+        return min.get(0) + "";
+    }
+
+    private static void findMin(int[][] matrix, int r, int c, int sumSoFar, List<Integer> min, boolean[][] visited) {
+        if (r >= matrix.length || c >= matrix.length || r < 0 || c < 0) {
+            return;
+        }
+
+        if (c == matrix.length - 1) {
+            setMin(min, matrix[r][c] + sumSoFar);
+            return;
+        }
+
+        if (visited[r][c]) {
+            return;
+        }
+
+        sumSoFar += matrix[r][c];
+        visited[r][c] = true;
+
+        findMin(matrix, r, c + 1, sumSoFar, min, visited);
+        findMin(matrix, r - 1, c, sumSoFar, min, visited);
+        findMin(matrix, r + 1, c, sumSoFar, min, visited);
+
+        visited[r][c] = false;
+    }
+
+    private static void setMin(List<Integer> min, int m) {
+        if (min.size() == 0) {
+            min.add(m);
+        } else {
+            min.set(0, Math.min(min.get(0), m));
+        }
     }
 
     private static long factorial(int num) {

@@ -1,4 +1,4 @@
-package com.ProjectEuler.Prob_51_75;
+package com.ProjectEuler.Prob_76_100;
 
 import com.ProjectEuler.Utils.Log;
 import com.ProjectEuler.Utils.TimeLogger;
@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Created by deepanshu on 12/11/16, 12:20.
+ * Created by deepanshu on 25/08/16, 7:16 PM.
  */
-class $079_PasscodeDerivation {
+class $081_PathSumTwoWays {
     private static final String SPLIT_CHAR = " ";
     private static final int MOD = 1000000007;
-    private static final String FILE_NAME = "p079_keylog.txt";
+    private static final String FILE_NAME = "p081_matrix.txt";
     private static final String TESTCASE_TIME_LOG_MESSAGE = "Time to execute testcase: ";
     private static final String INPUT_TIME_LOG_MESSAGE = "Time to take input: ";
     private static final FastScanner sc = new FastScanner(new BufferedReader(new InputStreamReader(System.in)));
@@ -29,19 +29,28 @@ class $079_PasscodeDerivation {
     public static void main(String[] args) throws Exception {
         initFileScanner();
         Log.enableLogging();
-        int T = sc.nextInt();
-        while (T > 0) {
-            //int in = rsi(br);
-            tl.startTracking();
-            String res = getResult();
-            tl.pauseTracking();
-            print(res);
-            tl.stopTrackingAndLog();
-            T--;
-        }
+        tl.startTracking();
+        String res = getResult(readMatrix());
+        tl.pauseTracking();
+        print(res);
+        tl.stopTrackingAndLog();
         if (out != null) {
             out.close();
         }
+    }
+
+    private static int[][] readMatrix() throws Exception {
+        int[][] matrix = new int[80][80];
+        String[] lines = fsc.next(80);
+
+        for (int i = 0; i < matrix.length; i++) {
+            String[] values = lines[i].split(",");
+            for(int j = 0 ; j < matrix[i].length; j++) {
+                matrix[i][j] = Integer.parseInt(values[j]);
+            }
+        }
+
+        return matrix;
     }
 
     private static void print(String str) {
@@ -56,90 +65,24 @@ class $079_PasscodeDerivation {
         fsc = new FastScanner(new BufferedReader(new FileReader(FILE_NAME)));
     }
 
-    private static String getResult() {
-        String codeString = "";
-        ArrayList<String> codeList = new ArrayList<>(50);
-        ArrayList<String> incrementalCodeList = new ArrayList<>(50);
-
-        try {
-            while (true) {
-                String currentCode = fsc.next();
-                codeList.add(currentCode);
-                char[] currentChars = currentCode.toCharArray();
-                int indexA = codeString.indexOf(currentChars[0]),
-                        indexB = codeString.indexOf(currentChars[1]),
-                        indexC = codeString.indexOf(currentChars[2]);
-
-
-                if (indexA == -1) {
-                    codeString += currentChars[0];
-                    indexA = codeString.length() - 1;
-                }
-
-                if (indexB == -1) {
-                    codeString += currentChars[1];
-                    indexB = codeString.length() - 1;
-                }
-
-                if (indexC == -1) {
-                    codeString += currentChars[2];
-                    indexC = codeString.length() - 1;
-                }
-
-                if (indexC < indexB || indexC < indexA) {
-                    codeString = moveChar(codeString, indexC, Math.max(indexA, indexB));
-                    indexA = codeString.indexOf(currentChars[0]);
-                    indexB = codeString.indexOf(currentChars[1]);
-                }
-
-                if (indexB < indexA) {
-                    codeString = moveChar(codeString, indexB, indexA);
-                }
-                incrementalCodeList.add(codeString);
-            }
-        } catch (Exception e) {
+    private static String getResult(int[][] matrix) {
+        for(int i = 1; i < matrix.length; i++) {
+            matrix[0][i] = matrix[0][i] + matrix[0][i-1];
         }
 
-        for (String code : codeList) {
-            int indexA = codeString.indexOf(code.charAt(0)),
-                    indexB = codeString.indexOf(code.charAt(1)),
-                    indexC = codeString.indexOf(code.charAt(2));
+        for(int i = 1; i < matrix.length; i++) {
+            matrix[i][0] = matrix[i][0] + matrix[i-1][0];
+        }
 
-            if (!(indexA < indexB && indexB < indexC)) {
-                print("Not correct");
+        for(int i = 1; i < matrix.length; i++) {
+            for(int j = 1; j < matrix[i].length; j++) {
+                int up = matrix[i-1][j];
+                int left = matrix[i][j-1];
+                matrix[i][j] = matrix[i][j] + Math.min(up, left);
             }
         }
 
-        return codeString + "";
-    }
-
-    private static String moveChar(String s, int originalIndex, int newIndex) {
-        char[] chars = s.toCharArray();
-        char charToShift = chars[originalIndex];
-
-        if (originalIndex < newIndex) {
-            shiftChars(chars, originalIndex + 1, newIndex, -1);
-        } else if (originalIndex > newIndex) {
-            shiftChars(chars, newIndex, originalIndex - 1, 1);
-        }
-
-        chars[newIndex] = charToShift;
-
-        return new String(chars);
-    }
-
-    private static void shiftChars(char[] chars, int begIndex, int endIndex, int shiftBy) {
-        if (shiftBy > 0) {
-            while (endIndex >= begIndex) {
-                chars[endIndex + shiftBy] = chars[endIndex];
-                endIndex--;
-            }
-        } else if (shiftBy < 0) {
-            while (begIndex <= endIndex) {
-                chars[begIndex + shiftBy] = chars[begIndex];
-                begIndex++;
-            }
-        }
+        return matrix[79][79] + "";
     }
 
     private static long factorial(int num) {
@@ -211,6 +154,26 @@ class $079_PasscodeDerivation {
     private static <T> void par(T[] arr) {
         for (T a : arr) {
             out.println(a.toString());
+        }
+    }
+
+    //print matrix
+    private static <T> void pmat(T[][] arr) {
+        for (T[] a : arr) {
+            for(T b: a) {
+                out.print(a.toString() + "\t");
+            }
+            out.println();
+        }
+    }
+
+    //print int matrix
+    private static void pmat(int[][] arr) {
+        for (int[] a : arr) {
+            for(int b: a) {
+                out.print(a + "\t");
+            }
+            out.println();
         }
     }
 

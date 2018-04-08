@@ -77,7 +77,7 @@ class $054_PokerHands {
     private static String[] rmsff(String fileName) throws IOException {
         BufferedReader br = brff(fileName);
 
-        ArrayList<String> stringArrayList = new ArrayList<>(1000);
+        ArrayList<String> stringArrayList = new ArrayList<String>(1000);
         String line;
         while ((line = br.readLine()) != null) {
             stringArrayList.add(line);
